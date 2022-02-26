@@ -1,6 +1,7 @@
 package com.tk.hogangnono.job.lawd;
 
 import com.tk.hogangnono.core.entity.Lawd;
+import com.tk.hogangnono.core.service.LawdService;
 import com.tk.hogangnono.validator.FilePathParameterValidator;
 import lombok.RequiredArgsConstructor;
 
@@ -31,6 +32,8 @@ public class LawdInsertJobConfig {
 
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
+
+    private final LawdService lawdService;
 
     @Bean
     public Job lawdInsertJob(Step lawdInsertStep){
@@ -70,7 +73,7 @@ public class LawdInsertJobConfig {
     @Bean
     @StepScope
     public ItemWriter<Lawd> lawdItemWriter(){
-        return items -> items.forEach(System.out::println);
+        return items -> items.forEach(lawdService::upsert);
     }
 
 }
