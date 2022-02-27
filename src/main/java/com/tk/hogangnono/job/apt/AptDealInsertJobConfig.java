@@ -1,5 +1,6 @@
 package com.tk.hogangnono.job.apt;
 
+import com.tk.hogangnono.adapter.ApartmentApiResource;
 import com.tk.hogangnono.core.dto.AptDealDto;
 import com.tk.hogangnono.validator.FilePathParameterValidator;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 
+import java.time.YearMonth;
+
 @Configuration
 @RequiredArgsConstructor
 @Slf4j
@@ -27,11 +30,12 @@ public class AptDealInsertJobConfig {
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
 
+    private final ApartmentApiResource apartmentApiResource;
+
     @Bean
     public Job aptDealInsertJob(Step aptDealInsertStep){
         return jobBuilderFactory.get("aptDealInsertJob")
                 .incrementer(new RunIdIncrementer())
-                .validator(new FilePathParameterValidator())
                 .start(aptDealInsertStep)
                 .build();
     }
@@ -52,12 +56,11 @@ public class AptDealInsertJobConfig {
     @Bean
     @StepScope
     public StaxEventItemReader<AptDealDto> aptDealResourceReader(
-            @Value("#{jobParameters['filePath']}") String filePath,
             Jaxb2Marshaller aptDealDtoMarshaller
     ){
         return new StaxEventItemReaderBuilder<AptDealDto>()
                 .name("aptDealResourceReader")
-                .resource(new ClassPathResource(filePath))
+                .resource(apartmentApiResource.getResource("41135", YearMonth.of(2021, 7)))
                 .addFragmentRootElements("item")
                 .unmarshaller(aptDealDtoMarshaller)
                 .build();
