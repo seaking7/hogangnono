@@ -48,3 +48,7 @@ create table apt_notification
     updated_at          datetime not null,
     constraint uk_email_gulawdcd unique(email, gu_lawd_cd)
 );
+
+insert into apt_notification values(1, 'test@naver.com', '41135', 1, now(), now());
+insert into apt_notification values(2, 'test@naver.com', '11680', 1, now(), now());
+insert into apt_notification values(3, 'test@naver.com', '11110', 0, now(), now());
