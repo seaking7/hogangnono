@@ -3,6 +3,7 @@ package com.tk.hogangnono.job.apt;
 import com.tk.hogangnono.adapter.ApartmentApiResource;
 import com.tk.hogangnono.core.dto.AptDealDto;
 import com.tk.hogangnono.core.repository.LawdRepository;
+import com.tk.hogangnono.core.service.AptDealService;
 import com.tk.hogangnono.validator.FilePathParameterValidator;
 import com.tk.hogangnono.validator.LawdCdParameterValidator;
 import com.tk.hogangnono.validator.YearMonthParameterValidator;
@@ -53,7 +54,7 @@ public class AptDealInsertJobConfig {
                 .incrementer(new RunIdIncrementer())
                 .validator(aptDealJobParameterValidator())
                 .start(guLawdCdStep)
-                .on("CONTINUABLE").to(contextPrintStep).next(guLawdCdStep)
+                .on("CONTINUABLE").to(aptDealInsertStep).next(guLawdCdStep)
                 .from(guLawdCdStep)
                 .on("*").end()
                 .end()
@@ -141,9 +142,9 @@ public class AptDealInsertJobConfig {
 
     @Bean
     @StepScope
-    public ItemWriter<AptDealDto> aptDealWriter(){
+    public ItemWriter<AptDealDto> aptDealWriter(AptDealService aptDealService){
         return items -> {
-            items.forEach(System.out::println);
+            items.forEach(aptDealService::upsert);
             System.out.println("-------Writing Completed---------");
         };
     }

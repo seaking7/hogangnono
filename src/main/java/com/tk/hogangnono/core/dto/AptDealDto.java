@@ -1,10 +1,15 @@
 package com.tk.hogangnono.core.dto;
 
+import io.micrometer.core.instrument.util.StringUtils;
 import lombok.Getter;
 import lombok.ToString;
 
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 /*
  * 아파트 실거래가 API의 각각의 거래정보를 담는 객체
@@ -16,6 +21,10 @@ public class AptDealDto {
 
     @XmlElement(name = "거래금액")
     private String dealAmount;
+
+    public Long getDealAmount(){
+        return Long.parseLong(dealAmount.replaceAll(",", "").trim());
+    }
 
     @XmlElement(name = "거래유형")
     private String dealType;
@@ -44,6 +53,10 @@ public class AptDealDto {
     @XmlElement(name = "지번")
     private String jibun;
 
+    public String getJibun(){
+        return Optional.ofNullable(jibun).orElse("");
+    }
+
     @XmlElement(name = "지역코드")
     private String regionalCode;
 
@@ -51,9 +64,24 @@ public class AptDealDto {
     private Integer floor;
 
     @XmlElement(name = "해제사유발생일")
-    private String dealCanceledDate;
+    private String dealCanceledDate;        //21.07.30
+
+    public LocalDate getDealCanceledDate(){
+        if(StringUtils.isBlank(dealCanceledDate)){
+            return null;
+        }
+        return LocalDate.parse(dealCanceledDate.trim(), DateTimeFormatter.ofPattern("yy.MM.dd"));
+    }
 
     @XmlElement(name = "해제여부")
-    private String dealCanceled;
+    private String dealCanceled;        // O
+
+    public boolean isDealCanceled(){
+        return "O".equals(dealCanceled);
+    }
+
+    public LocalDate getDealDate(){
+        return LocalDate.of(year, month, day);
+    }
 
 }

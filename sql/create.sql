@@ -32,7 +32,7 @@ create table apt_deal
     deal_amount     bigint not null,
     floor           int not null,
     deal_canceled   tinyint(1) default 0 not null,
-    deal_canceled_date date not null,
+    deal_canceled_date date,
     created_at      datetime not null,
     updated_at      datetime not null
 );
