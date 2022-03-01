@@ -1,5 +1,6 @@
 package com.tk.hogangnono.job.notify;
 
+import com.tk.hogangnono.adapter.FakeSendService;
 import com.tk.hogangnono.core.dto.AptDto;
 import com.tk.hogangnono.core.dto.NotificationDto;
 import com.tk.hogangnono.core.entity.AptNotification;
@@ -100,8 +101,8 @@ public class AptNotificationJobConfig {
 
     @StepScope
     @Bean
-    public ItemWriter<NotificationDto> aptNotificationWriter(){
-        return items -> items.forEach(item -> System.out.println(item.toMessage()));
+    public ItemWriter<NotificationDto> aptNotificationWriter(FakeSendService fakeSendService){
+        return items -> items.forEach(item -> fakeSendService.send(item.getEmail(), item.toMessage()));
     }
 }
 

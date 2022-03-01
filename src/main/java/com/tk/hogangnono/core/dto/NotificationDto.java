@@ -1,6 +1,7 @@
 package com.tk.hogangnono.core.dto;
 
 import lombok.Builder;
+import lombok.Getter;
 import org.springframework.data.util.Pair;
 
 import java.text.DecimalFormat;
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Builder
+@Getter
 public class NotificationDto {
     private String email;
     private String guName;
